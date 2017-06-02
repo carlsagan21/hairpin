@@ -1,6 +1,7 @@
 # env settings
 
 python3 latest(3.6.1) 에서 동작을 확인하였습니다.  
+자세한 스펙은 `cat Pipfile` 을 참고하기 바랍니다.  
 terminal 에서 python3 커맨드를 사용할 수 있다면, `($PROJECT_ROOT)/main.py DNAseq.fasta` 만으로 실행됩니다.
 
 ```
