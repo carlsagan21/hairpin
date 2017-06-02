@@ -1,9 +1,11 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c941d2e84a3eb3efc8841d53926593363b5d5e676351d6e226efffa8b6bd9581"
+            "sha256": "97c4dec4f61fd24bf6ecd03b2ada961b5e0bb27feedce5f15e947596550c7ec8"
         },
-        "requires": {},
+        "requires": {
+            "python_full_version": "3.6.1"
+        },
         "sources": [
             {
                 "url": "https://github.com/carlsagan21/hairpin",
