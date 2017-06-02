@@ -7,6 +7,7 @@ from consts import *
 parser = argparse.ArgumentParser(description='Hairpin Finder by soo. Please Enjoy!')
 parser.add_argument('-v', '--verbose', help='increase output verbosity', action='store_true')
 parser.add_argument('-t', '--toy', help='run with the given toy sequence', action='store_true')
+parser.add_argument('input_file', help='input file to read a DNA sequence', type=argparse.FileType('r'))
 args = parser.parse_args()
 
 
@@ -108,14 +109,18 @@ def get_loop(seq_m, extended_arm_in_loop):
     ))
 
 
-def get_sequence(s):
-    if s == TOY:
+def get_sequence():
+    if args.toy:
         return toy_sequence
     else:
-        f = open('./DNAseq.fasta', 'r')
-        f.readline()
-        sequence = f.readline()
-        f.close()
+        sequence = ''
+        with args.input_file as f:
+            f.readline()
+            sequence = f.readline()
+        # else:
+        #     f = open(sys.stdin, 'r')
+        #     sequence = args.input_file.readline()
+        #     f.close()
         return sequence
 
 
@@ -132,10 +137,7 @@ def match_pairs_to_seq(match_pairs):
 
 
 if __name__ == '__main__':
-    seq_param = ''
-    if args.toy:
-        seq_param = TOY
-    full_seq = get_sequence(seq_param)
+    full_seq = get_sequence()
 
     k_mer_start = 0
 
