@@ -14,8 +14,13 @@ optional arguments:
   -t, --toy      run with the given toy sequence
 ```
 
+### FYI
+
+이 프로젝트는 [`pipenv`](https://github.com/kennethreitz/pipenv) 를 사용합니다. 즉 [`Pipfile`](https://github.com/pypa/pipfile) 을 활용하고 있습니다.  
+다행이도 서드파티 의존성은 없으므로 신경쓰지 않아도 되지만, 서드파티를 추가할 때는 `Pipfile` 을 활용해 주시기 바랍니다.
+
 # how to run
 
-```
+```commandline
 python3 main.py
 ```

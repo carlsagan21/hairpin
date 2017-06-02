@@ -6,14 +6,14 @@ match2 = [('M', 'G'), ('M', 'A'), ('M', 'C'), ('M', 'A'), ('M', 'A'), ('M', 'C')
 
 
 print('get_last_arm_index1')
-idx, a = get_extended_arm(match1, True)
+idx, _ = get_extended_arm(match1, True)
 if idx == 3:
     print('success')
 else:
     print('failure')
 
 print('get_last_arm_index2')
-idx, a = get_extended_arm(match2, False)
+idx, _ = get_extended_arm(match2, False)
 if idx == 15:
     print('success')
 else:
