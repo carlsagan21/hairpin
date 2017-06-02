@@ -24,3 +24,9 @@ optional arguments:
 ```commandline
 python3 main.py
 ```
+
+or just excute
+
+```commandline
+./run
+```
