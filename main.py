@@ -95,10 +95,30 @@ def get_extended_arm(match_pairs, is_eq_seq: bool):
         # FIXME optimization idx 를 끝까지가 아니라 절반만 돌 수 도 있음
         prev_match_idx = idx
         idx += 1
+        if is_eq_seq and idx > (len(match_pairs) // 2):
+            break
 
     # stop 조건을 못만났을때, 전체가 다 확장된 팔이 되는데, 전체가 음수면 1짜리 루프가 있다고 봐야.
-    arm = match_pairs[:prev_match_idx + 1] if prev_match_idx != -1 else (
-        match_pairs if not is_eq_seq else match_pairs[:len(match_pairs) // 2])
+    # 매치가 없을때
+    # 매치가 있는데 스탑이 없을때
+    arm = []
+    if is_eq_seq:
+        if prev_match_idx == -1:
+            arm = []
+        else:
+            arm = match_pairs[:len(match_pairs) // 2]  # 좀 이상함. 이걸 안하고 prev_match_idx 를 해야할거 같은데 하면 안돌아감.
+    else:
+        if prev_match_idx == -1:
+            arm = []
+        else:
+            arm = match_pairs[:prev_match_idx]
+
+
+    # arm = match_pairs[:prev_match_idx + 1] if prev_match_idx != -1\
+    #     else (
+    #     match_pairs if not is_eq_seq
+    #     else match_pairs[:len(match_pairs) // 2]
+    # )
     return prev_match_idx, arm
 
 
@@ -140,6 +160,8 @@ if __name__ == '__main__':
     full_seq = get_sequence()  # type: str
 
     k_mer_start = 0  # type: int
+
+    is_first_print = True  # type: bool
 
     while k_mer_start <= len(full_seq) - HAIRPIN_MIN:
         k_mer = full_seq[k_mer_start: k_mer_start + k_unit]  # type: str
@@ -195,7 +217,7 @@ if __name__ == '__main__':
             arm_lcs = list(filter(lambda pair: pair[0] == MATCH, extended_arm))
             loop = get_loop(match_m, arm_m)
 
-            if len(loop) > LOOP_MAX:
+            if not check_loop_length(len(loop)):
                 k_mer_start += 1
                 continue
 
@@ -203,8 +225,18 @@ if __name__ == '__main__':
             right_arm_seq = match_pairs_to_seq(right_arm)
 
             hairpin_seq = match_pairs_to_seq(left_arm + loop + right_arm)
+
+            if not check_hairpin_sequence_length(len(hairpin_seq)):
+                k_mer_start += 1
+                continue
+
             arm_lcs_seq = match_pairs_to_seq(arm_lcs)
             loop_seq = match_pairs_to_seq(loop)
+
+            if is_first_print:
+                is_first_print = False
+            else:
+                print()
 
             if args.verbose:
                 print('k_mer')
@@ -230,10 +262,18 @@ if __name__ == '__main__':
                 print('left_arm_seq')
                 print(left_arm_seq)
                 print('right_arm_seq_ex')
-                print(match_pairs_to_seq(list(filter(lambda pair: pair[0] != INDEL_UP, arm_lr))))
+                t = list(filter(lambda pair: pair[0] != INDEL_UP, arm_lr))
+                t.reverse()
+                print(match_pairs_to_seq(t))
                 print('right_arm_seq')
                 print(right_arm_seq)
 
+                print('middle_left_arm_seq_ex')
+                print(match_pairs_to_seq(list(filter(lambda pair: pair[0] != INDEL_DOWN, arm_m))))
+                print('middle_right_arm_seq_ex')
+                t = list(filter(lambda pair: pair[0] != INDEL_UP, arm_m))
+                t.reverse()
+                print(match_pairs_to_seq(t))
                 print('middle_arm_lcs')
                 print(match_pairs_to_seq(list(filter(lambda pair: pair[0] == MATCH, arm_m))))
 
@@ -248,6 +288,7 @@ if __name__ == '__main__':
                 print(arm_lcs_seq)
                 print(loop_seq)
 
-            print()
+            if not full_seq.find(hairpin_seq):
+                print('Cannot find hairpin sequence in full sequence! Error.')
 
             k_mer_start = k_mer_rev_start + k_unit + k_seq_left_right_len
