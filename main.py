@@ -106,12 +106,12 @@ def get_extended_arm(match_pairs, is_eq_seq: bool):
         if prev_match_idx == -1:
             arm = []
         else:
-            arm = match_pairs[:len(match_pairs) // 2]  # 좀 이상함. 이걸 안하고 prev_match_idx 를 해야할거 같은데 하면 안돌아감.
+            arm = match_pairs[:len(match_pairs) // 2]  # 이게 맞음. prev_match_idx 로 짤라주는게 아니라, 전체 매칭 구조를 리턴하면 알아서 정리해줌.
     else:
         if prev_match_idx == -1:
             arm = []
         else:
-            arm = match_pairs[:prev_match_idx]
+            arm = match_pairs[:prev_match_idx + 1]
 
 
     # arm = match_pairs[:prev_match_idx + 1] if prev_match_idx != -1\
@@ -288,7 +288,7 @@ if __name__ == '__main__':
                 print(arm_lcs_seq)
                 print(loop_seq)
 
-            if not full_seq.find(hairpin_seq):
+            if full_seq.find(hairpin_seq) == -1:
                 print('Cannot find hairpin sequence in full sequence! Error.')
 
             k_mer_start = k_mer_rev_start + k_unit + k_seq_left_right_len
