@@ -141,7 +141,7 @@ if __name__ == '__main__':
 
     k_mer_start = 0  # type: int
 
-    while k_mer_start <= len(full_seq) - LOOP_MAX:
+    while k_mer_start <= len(full_seq) - HAIRPIN_MIN:
         k_mer = full_seq[k_mer_start: k_mer_start + k_unit]  # type: str
         # 문제 조건에 따르면 k_mer_start + HAIRPIN_MAX + 1 를 해야하는데, 그렇게 되면
         # k_seq_left_right_len 계산에서 HAIRPIN_MAX - 2 * k_unit - len(k_seq_middle) 가 1 오버되어 음수가 되어 버린다.
